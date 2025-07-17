@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard 1</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12, #27ae60);
+        }
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            background: #fff3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .sidebar ul li.active {
+            background: linear-gradient(90deg, #3498db 60%, #764ba2 100%);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 2px 0 8px rgba(52,152,219,0.08);
+        }
+        .sidebar ul li:hover {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), transparent);
+            transform: translateX(10px);
+        }
+        .sidebar ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #3498db;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        .sidebar ul li.active::before,
+        .sidebar ul li:hover::before {
+            transform: scaleY(1);
+        }
+        .content {
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header div {
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .header div:first-child {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        .header div:not(:first-child) {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid transparent;
+        }
+        .header div:not(:first-child):hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .header-icons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .header-icon {
+            font-size: 22px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .header-icon:hover {
+            background: #f0f0f0;
+        }
+        .main-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border: 1px solid #e0e0e0;
+            overflow: hidden;
+        }
+        .row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            border-bottom: 1px solid #f0f0f0;
+        }
+        .row:last-child {
+            border-bottom: none;
+        }
+        .cell {
+            padding: 18px 12px;
+            text-align: left;
+            font-size: 16px;
+            border-right: 1px solid #f0f0f0;
+            background: white;
+        }
+        .row .cell:last-child {
+            border-right: none;
+        }
+        .header-row .cell {
+            background: #f8f9fa;
+            font-weight: 600;
+            font-size: 17px;
+        }
+        .home-header {
+            color: #764ba2;
+        }
+        .notifications-bar {
+            display: flex;
+            align-items: center;
+            background: #fffbe6;
+            color: #b8860b;
+            border-radius: 10px;
+            padding: 14px 24px;
+            margin: 24px 0 30px 0;
+            font-size: 16px;
+            box-shadow: 0 2px 8px rgba(255, 215, 0, 0.08);
+            border: 1px solid #ffe58f;
+        }
+        .notification-icon {
+            font-size: 22px;
+            margin-right: 12px;
+        }
+        .notification-text {
+            font-weight: 500;
+        }
+        .stats-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 30px;
+            margin-bottom: 30px;
+        }
+        .stats-card {
+            background: white;
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transition: all 0.3s ease;
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .stats-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+        }
+        .stats-card h3 {
+            font-size: 20px;
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-weight: 600;
+            text-align: center;
+        }
+        .stat-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 0;
+            border-bottom: 1px solid #ecf0f1;
+        }
+        .stat-item:last-child {
+            border-bottom: none;
+        }
+        .stat-label {
+            font-size: 16px;
+            color: #7f8c8d;
+            font-weight: 500;
+        }
+        .stat-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3498db;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="adtronix.png" alt="Adtronix Logo" class="sidebar-logo">
+            <div class="company-name">ADTRONIX</div>
+        </div>
+        <ul>
+            <li class="active">🏠 Home</li>
+            <li>📦 Item</li>
+            <li>🏷️ Asset</li>
+            <li>💼 Transaction</li>
+            <li>📋 Inventory</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div>📈 Dashboard</div>
+            <div class="header-icons">
+                <span class="header-icon" aria-label="Settings">⚙️</span>
+                <span class="header-icon" aria-label="User Management">👥</span>
+                <span class="header-icon" aria-label="Profile">👤</span>
+                <span class="header-icon" aria-label="Logout">🚪</span>
+            </div>
+        </div>
+        <div class="main-grid">
+            <div class="row">
+                <div class="cell">Total Assets</div>
+                <div class="cell"><a href="#" class="clickable">1,247</a></div>
+            </div>
+            <div class="row">
+                <div class="cell">In Facilities</div>
+                <div class="cell"><span class="label">892</span></div>
+            </div>
+            <div class="row">
+                <div class="cell">Outside Facilities</div>
+                <div class="cell"><span class="label">355</span></div>
+            </div>
+        </div>
+        <div class="notifications-bar">
+            <span class="notification-icon">🔔</span>
+            <span class="notification-text">No new notifications</span>
+        </div>
+        <div class="stats-section">
+            <div class="stats-card">
+                <h3>📊 Asset Statistics</h3>
+                <div class="stat-item">
+                    <span class="stat-label">Total Value</span>
+                    <span class="stat-value">₹2,40,00,000</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Total Assets</span>
+                    <span class="stat-value">1,247</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">In Facilities</span>
+                    <span class="stat-value">892</span>
+                </div>
+                <div class="stat-item">
+                    <span class="stat-label">Outside Facilities</span>
+                    <span class="stat-value">355</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html> 
