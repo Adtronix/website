@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard 4</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12, #27ae60);
+        }
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            background: #fff3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .sidebar ul li.active {
+            background: linear-gradient(90deg, #3498db 60%, #764ba2 100%);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 2px 0 8px rgba(52,152,219,0.08);
+        }
+        .sidebar ul li:hover {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), transparent);
+            transform: translateX(10px);
+        }
+        .sidebar ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #3498db;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        .sidebar ul li.active::before,
+        .sidebar ul li:hover::before {
+            transform: scaleY(1);
+        }
+        .content {
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header div {
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .header div:first-child {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        .header div:not(:first-child) {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid transparent;
+        }
+        .header div:not(:first-child):hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .header-icons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .header-icon {
+            font-size: 22px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .header-icon:hover {
+            background: #f0f0f0;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #764ba2;
+            margin-bottom: 18px;
+            margin-top: 10px;
+        }
+        .checkin-section, .checkout-section {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            max-width: 900px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .checkin-fields {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 18px 32px;
+            margin-bottom: 18px;
+        }
+        .checkin-fields label {
+            font-weight: 500;
+            color: #333;
+            display: block;
+            margin-bottom: 6px;
+        }
+        .checkin-fields .field-group {
+            display: flex;
+            flex-direction: column;
+        }
+        .checkin-fields .scan-label {
+            color: #3498db;
+            font-size: 15px;
+            font-style: italic;
+            margin-top: 2px;
+        }
+        .transaction-table-section {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 24px 32px;
+            margin-bottom: 30px;
+            max-width: 1000px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        th, td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            text-align: left;
+            font-size: 15px;
+        }
+        th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #764ba2;
+        }
+        .checkout-section {
+            margin-top: 40px;
+        }
+        .checkout-title {
+            font-size: 18px;
+            font-weight: 700;
+            color: #3498db;
+            margin-bottom: 12px;
+        }
+        .checkin-btn, .checkout-btn {
+            margin-top: 18px;
+            padding: 12px 32px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: #fff;
+            font-size: 16px;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(39, 174, 96, 0.15);
+            transition: background 0.2s, transform 0.2s;
+        }
+        .checkin-btn:hover, .checkout-btn:hover {
+            background: linear-gradient(135deg, #219150, #27ae60);
+            transform: translateY(-2px) scale(1.03);
+        }
+        @media (max-width: 900px) {
+            .checkin-section, .checkout-section, .transaction-table-section {
+                padding: 12px 4vw;
+            }
+            .checkin-fields {
+                grid-template-columns: 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="logo-container">
+            <img src="adtronix.png" alt="Adtronix Logo" class="sidebar-logo">
+            <div class="company-name">ADTRONIX</div>
+        </div>
+        <ul>
+            <li>🏠 Home</li>
+            <li>📦 Item</li>
+            <li>🏷️ Asset</li>
+            <li class="active">💼 Transaction</li>
+            <li>📋 Inventory</li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div>📈 Dashboard</div>
+            <div class="header-icons">
+                <span class="header-icon" aria-label="Settings">⚙️</span>
+                <span class="header-icon" aria-label="User Management">👥</span>
+                <span class="header-icon" aria-label="Profile">👤</span>
+                <span class="header-icon" aria-label="Logout">🚪</span>
+            </div>
+        </div>
+        <div class="checkin-section">
+            <div class="section-title"><em>Checkin</em></div>
+            <div class="checkin-fields">
+                <div class="field-group">
+                    <label>Tagid</label>
+                    <input type="text" placeholder="Scan tag">
+                </div>
+                <div class="field-group">
+                    <label>Label</label>
+                    <input type="text" placeholder="Label">
+                </div>
+                <div class="field-group">
+                    <label>Location</label>
+                    <input type="text" placeholder="Comes from location system or">
+                </div>
+            </div>
+            <button class="checkin-btn">Check In</button>
+        </div>
+        <div class="transaction-table-section">
+            <table>
+                <thead>
+                    <tr>
+                        <th>AssetID</th>
+                        <th>Item Name</th>
+                        <th>Item Nature</th>
+                        <th>Item Category</th>
+                        <th>Item Type</th>
+                        <th>TagID</th>
+                        <th>Location</th>
+                        <th>TimeStamp</th>
+                        <th>Type</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>AD0000001</td>
+                        <td>Tshirt-Solid</td>
+                        <td>Inventory</td>
+                        <td>Men</td>
+                        <td>Pure Cotton</td>
+                        <td>TG00000001</td>
+                        <td>Wazirabad, Delhi</td>
+                        <td>12-03-2025 10:00:12</td>
+                        <td>Checkin</td>
+                    </tr>
+                    <tr>
+                        <td>AD0000006</td>
+                        <td>Saree Full Drape Pure Silk</td>
+                        <td>Inventory</td>
+                        <td>Women</td>
+                        <td>Silk</td>
+                        <td>TG00000001</td>
+                        <td>Wazirabad, Delhi</td>
+                        <td>15-03-2025 10:00:12</td>
+                        <td>Checkin</td>
+                    </tr>
+                    <tr>
+                        <td>AD0000007</td>
+                        <td>Kiddie Pant</td>
+                        <td>Inventory</td>
+                        <td>Kid</td>
+                        <td>Lycra</td>
+                        <td>TG00000001</td>
+                        <td>Wazirabad, Delhi</td>
+                        <td>17-03-2025 10:00:12</td>
+                        <td>Checkout</td>
+                    </tr>
+                    <tr>
+                        <td>AD0000008</td>
+                        <td>Jeans Broad Bottom</td>
+                        <td>Inventory</td>
+                        <td>Men</td>
+                        <td>Lycra-Denim</td>
+                        <td>TG00000001</td>
+                        <td>Wazirabad, Delhi</td>
+                        <td>12-07-2025 10:00:12</td>
+                        <td>Checkout</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="checkout-btn">Check Out</button>
+        </div>
+    </div>
+</div>
+</body>
+</html> 
