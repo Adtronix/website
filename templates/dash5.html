@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard 5</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            display: grid;
+            grid-template-columns: 280px 1fr;
+            min-height: 100vh;
+        }
+        .sidebar {
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 30px 0;
+            box-shadow: 4px 0 15px rgba(0,0,0,0.1);
+            position: relative;
+        }
+        .sidebar::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #3498db, #e74c3c, #f39c12, #27ae60);
+        }
+        .logo-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .sidebar-logo {
+            width: 56px;
+            height: 56px;
+            object-fit: contain;
+            margin-bottom: 10px;
+            border-radius: 12px;
+            background: #fff3;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .company-name {
+            font-size: 18px;
+            font-weight: 700;
+            letter-spacing: 2px;
+            color: #fff;
+            text-align: center;
+            margin-bottom: 10px;
+        }
+        .sidebar ul {
+            list-style: none;
+        }
+        .sidebar ul li {
+            padding: 15px 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            font-weight: 500;
+            letter-spacing: 0.5px;
+        }
+        .sidebar ul li.active {
+            background: linear-gradient(90deg, #3498db 60%, #764ba2 100%);
+            color: #fff;
+            font-weight: 700;
+            border-radius: 0 20px 20px 0;
+            box-shadow: 2px 0 8px rgba(52,152,219,0.08);
+        }
+        .sidebar ul li:hover {
+            background: linear-gradient(90deg, rgba(52, 152, 219, 0.2), transparent);
+            transform: translateX(10px);
+        }
+        .sidebar ul li::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            height: 100%;
+            width: 4px;
+            background: #3498db;
+            transform: scaleY(0);
+            transition: transform 0.3s ease;
+        }
+        .sidebar ul li.active::before,
+        .sidebar ul li:hover::before {
+            transform: scaleY(1);
+        }
+        .content {
+            background: #f8f9fa;
+            padding: 20px;
+            overflow-y: auto;
+        }
+        .header {
+            background: white;
+            border-radius: 15px;
+            padding: 20px 30px;
+            margin-bottom: 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .header div {
+            padding: 12px 20px;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+            position: relative;
+            overflow: hidden;
+        }
+        .header div:first-child {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            font-weight: 600;
+        }
+        .header div:not(:first-child) {
+            background: #f8f9fa;
+            color: #666;
+            border: 2px solid transparent;
+        }
+        .header div:not(:first-child):hover {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        .header-icons {
+            display: flex;
+            gap: 18px;
+            align-items: center;
+        }
+        .header-icon {
+            font-size: 22px;
+            cursor: pointer;
+            padding: 8px;
+            border-radius: 50%;
+            transition: background 0.2s;
+        }
+        .header-icon:hover {
+            background: #f0f0f0;
+        }
+        .inventory-section {
+            background: #fff;
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            padding: 32px 40px;
+            max-width: 1100px;
+            margin: 0 auto 30px auto;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #764ba2;
+            margin-bottom: 18px;
+            margin-top: 10px;
+        }
+        .inventory-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .inventory-table th, .inventory-table td {
+            border: 1px solid #e0e0e0;
+            padding: 10px 8px;
+            text-align: left;
+            font-size: 15px;
+        }
+        .inventory-table th {
+            background: #f8f9fa;
+            font-weight: 700;
+            color: #764ba2;
+        }
+        .inventory-table td:first-child {
+            font-weight: 600;
+        }
+        .cancel-btn {
+            background: #e74c3c;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            padding: 10px 28px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+            margin-top: 24px;
+        }
+        .cancel-btn:hover {
+            background: #c0392b;
+        }
+        @media (max-width: 1100px) {
+            .inventory-section {
+                padding: 12px 4vw;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+            .sidebar {
+                display: none;
+            }
+            .header {
+                flex-direction: column;
+                gap: 10px;
+            }
+        }
+    </style>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" />
+    <!-- CSS -->
+    <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+    <!-- JS -->
+    <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+    <!-- Images: update any <img src="..."> to use url_for('static', filename='...') -->
+</head>
+<body>
+<div class="container">
+    <div class="sidebar">
+        <div class="logo-container">
+            <a href="{{ url_for('index') }}"><img src="{{ url_for('static', filename='assets/adtronix.png') }}" alt="Adtronix Logo" class="sidebar-logo"></a>
+            <div class="company-name">ADTRONIX</div>
+        </div>
+        <ul>
+            <li><a href="{{ url_for('dash1') }}" style="color:inherit;text-decoration:none;">🏠 Home</a></li>
+            <li><a href="{{ url_for('dash2') }}" style="color:inherit;text-decoration:none;">📦 Item</a></li>
+            <li><a href="{{ url_for('dash3') }}" style="color:inherit;text-decoration:none;">🏷️ Asset</a></li>
+            <li><a href="{{ url_for('dash4') }}" style="color:inherit;text-decoration:none;">💼 Transaction</a></li>
+            <li class="active"><a href="{{ url_for('dash5') }}" style="color:inherit;text-decoration:none;">📋 Inventory</a></li>
+        </ul>
+    </div>
+    <div class="content">
+        <div class="header">
+            <div>📈 Dashboard</div>
+            <div class="header-icons">
+                <span class="header-icon" aria-label="Settings">⚙️</span>
+                <span class="header-icon" aria-label="User Management">👥</span>
+                <span class="header-icon" aria-label="Profile">👤</span>
+                <span class="header-icon" aria-label="Logout">🚪</span>
+                {% if picture and email %}
+                <span style="display:flex;align-items:center;gap:0.5em;margin-left:1.5em;">
+                  <img src="{{ picture }}" alt="Profile" style="width:36px;height:36px;border-radius:50%;border:2px solid #764ba2;object-fit:cover;">
+                  <span style="font-size:1rem;color:#764ba2;font-weight:600;">{{ email }}</span>
+                </span>
+                {% endif %}
+            </div>
+        </div>
+        <div class="inventory-section">
+            <div class="section-title"><em>Inventory</em></div>
+            <table class="inventory-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>All</th>
+                        <th>Location 1</th>
+                        <th>Location 2</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Expected</td>
+                        <td>1,247</td>
+                        <td>700</td>
+                        <td>547</td>
+                    </tr>
+                    <tr>
+                        <td>Matched</td>
+                        <td>1,000</td>
+                        <td>600</td>
+                        <td>400</td>
+                    </tr>
+                    <tr>
+                        <td>Missing</td>
+                        <td>247</td>
+                        <td>100</td>
+                        <td>147</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 32px; color: #888; font-style: italic;">RFID damaged</td>
+                        <td>150</td>
+                        <td>60</td>
+                        <td>90</td>
+                    </tr>
+                    <tr>
+                        <td style="padding-left: 32px; color: #888; font-style: italic;">Misplaced</td>
+                        <td>97</td>
+                        <td>40</td>
+                        <td>57</td>
+                    </tr>
+                </tbody>
+            </table>
+            <button class="cancel-btn">Cancel</button>
+        </div>
+    </div>
+</div>
+</body>
+</html> 

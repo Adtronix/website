@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ADTRONIX DASHBOARD</title>
+  <!-- Favicon-->
+  <link rel="icon" type="image/x-icon" href="{{ url_for('static', filename='assets/favicon.ico') }}" />
+  <!-- CSS -->
+  <link href="{{ url_for('static', filename='css/styles.css') }}" rel="stylesheet" />
+  <!-- JS -->
+  <script src="{{ url_for('static', filename='js/scripts.js') }}"></script>
+  <!-- Images: update any <img src="..."> to use url_for('static', filename='...') -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(120deg, #e3f0ff 0%, #b3d8f8 100%);
+      font-family: 'Inter', Arial, sans-serif;
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .dashboard-header {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin-top: 2.5rem;
+      margin-bottom: 2.2rem;
+    }
+    .company-logo {
+      width: 90px;
+      height: 90px;
+      object-fit: contain;
+      border-radius: 18px;
+      background: #fff;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.08);
+      margin-bottom: 0.7rem;
+    }
+    .company-name {
+      font-size: 2.5rem;
+      font-weight: 900;
+      color: #1976d2;
+      letter-spacing: 0.13em;
+      margin: 0;
+      line-height: 1.1;
+      text-shadow: 0 2px 8px rgba(25,118,210,0.08);
+      text-align: center;
+    }
+    .dashboard-section {
+      background: #fff;
+      border-radius: 18px;
+      box-shadow: 0 4px 24px rgba(25,118,210,0.10);
+      padding: 2.2rem 2.2rem 1.5rem 2.2rem;
+      max-width: 700px;
+      width: 90vw;
+      margin-bottom: 2.2rem;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+    .dashboard-section h2 {
+      font-size: 1.45rem;
+      font-weight: 800;
+      color: #1976d2;
+      margin-top: 0;
+      margin-bottom: 1.1rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+    }
+    .dashboard-section p, .dashboard-section ul {
+      font-size: 1.08rem;
+      font-weight: 400;
+      color: #222;
+      margin: 0 0 0.7rem 0;
+      line-height: 1.7;
+    }
+    .dashboard-section ul {
+      padding-left: 1.2em;
+      margin-bottom: 0.7rem;
+    }
+    .contact-info {
+      margin-top: 0.7rem;
+      font-size: 1.08rem;
+      color: #444;
+    }
+    .contact-info a {
+      color: #1976d2;
+      text-decoration: none;
+      font-weight: 600;
+    }
+    .user-google-icon {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      margin-bottom: 0.5rem;
+    }
+    .google-profile-pic {
+      width: 56px;
+      height: 56px;
+      border-radius: 50%;
+      box-shadow: 0 2px 8px rgba(25,118,210,0.13);
+      margin-bottom: 0.2rem;
+      border: 2.5px solid #1976d2;
+      background: #fff;
+      object-fit: cover;
+    }
+    .google-joined-label {
+      font-size: 0.95rem;
+      color: #1976d2;
+      font-weight: 600;
+      margin-bottom: 0.2rem;
+      letter-spacing: 0.04em;
+      text-align: center;
+    }
+    .user-google-icon-topright {
+      position: absolute;
+      top: 1.5rem;
+      right: 2.5rem;
+      z-index: 10;
+      align-items: flex-end;
+    }
+    @media (max-width: 700px) {
+      .dashboard-section {
+        padding: 1.2rem 0.7rem 1rem 0.7rem;
+        max-width: 98vw;
+      }
+      .dashboard-header {
+        margin-top: 1.2rem;
+        margin-bottom: 1.2rem;
+      }
+      .company-logo {
+        width: 60px;
+        height: 60px;
+      }
+      .company-name {
+        font-size: 1.5rem;
+      }
+      .user-google-icon-topright {
+        top: 0.7rem;
+        right: 0.7rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Signed in with Google badge/message -->
+  {% if email %}
+    <div style="display: flex; align-items: center; justify-content: center; margin-top: 1.5rem; margin-bottom: 1.2rem; gap: 0.7rem;">
+      {% if picture %}
+        <img src="{{ picture }}" alt="Google Profile Picture" style="width:48px; height:48px; border-radius:50%; border:2px solid #1976d2; object-fit:cover; box-shadow:0 2px 8px rgba(25,118,210,0.13);">
+      {% endif %}
+      <div style="display: flex; flex-direction: column; align-items: flex-start;">
+        <span style="font-size:1.08rem; color:#1976d2; font-weight:600;">Signed in with Google</span>
+        <span style="font-size:1.08rem; color:#222;">{{ email }}</span>
+      </div>
+    </div>
+  {% endif %}
+  <div class="dashboard-header">
+    <img src="{{ url_for('static', filename='adtronix.png') }}" alt="Adtronix Logo" class="company-logo">
+    <div class="company-name">ADTRONIX</div>
+  </div>
+  <div class="dashboard-section">
+    <h2>Home</h2>
+    <p>We are an Indian industrial automation company committed to building intelligent, scalable, and future-ready solutions under the Make in India initiative. Our core competencies span IoT-enabled systems, AI-driven analytics, advanced electronic sensors, real-time signal processing, and embedded hardware and firmware development.</p>
+    <p>With deep domain knowledge in industrial control systems, we specialize in developing end-to-end automation architectures—from edge devices and sensor networks to cloud-integrated platforms and predictive analytics engines. Our solutions enable seamless machine-to-machine (M2M) communication, remote monitoring, fault detection, and process optimization across various industrial sectors.</p>
+    <p>By combining embedded system design, data acquisition, and machine learning algorithms, we deliver robust automation systems that drive operational efficiency, enhance system reliability, and support Industry 4.0 transformation across Indian manufacturing and infrastructure.</p>
+  </div>
+  <div class="dashboard-section">
+    <h2>Team</h2>
+    <p>Our strength lies in a team of highly skilled engineers and technologists from India’s premier institutions, including the Indian Institutes of Technology (IITs) and alumni of esteemed management institutes like the Indian Institutes of Management (IIMs).</p>
+    <p>With a combined experience of over 60 years, our team brings deep expertise in software development, embedded systems, electronic hardware design, and end-to-end engineering solutions. We have successfully delivered complex, mission-critical projects across sectors such as manufacturing, healthcare, agriculture, energy, retail, and automation.</p>
+    <p>Blending cutting-edge technical knowledge with strategic business insight, we are uniquely positioned to design and implement solutions that are not only technologically advanced but also commercially viable and scalable.</p>
+    <p>Our multidisciplinary capabilities, hands-on industry experience, and commitment to innovation drive the development of robust, intelligent systems that solve real-world problems and deliver measurable value to our clients.</p>
+  </div>
+  <div class="dashboard-section">
+    <h2>Solutions</h2>
+    <p>Our state-of-the-art RFID solution is designed to deliver intelligent, real-time visibility and control across a wide range of industries—including retail, manufacturing, tourism, healthcare, and agriculture. Built with advanced RFID tags, sensors, antennas, and high-performance readers, our solution enables seamless asset tracking, inventory management, personnel monitoring, and process automation.</p>
+    <p>What sets our RFID offering apart is its modular and customizable architecture, allowing it to be precisely tailored to your specific business workflows and environmental conditions. Whether it's automating inventory in retail, ensuring traceability in manufacturing, tracking livestock or crops in agriculture, managing patient data in healthcare, or enhancing visitor experiences in tourism, our system delivers scalable and secure performance.</p>
+    <ul>
+      <li>Reduce operational costs</li>
+      <li>Minimize human errors</li>
+      <li>Improve process transparency</li>
+      <li>Enhance decision-making</li>
+      <li>Unlock substantial financial gains</li>
+    </ul>
+    <p>Our end-to-end implementation—from hardware deployment to software integration—ensures a smooth digital transformation journey, empowering businesses to achieve high ROI and sustainable competitive advantage in today's connected world.</p>
+  </div>
+  <div class="dashboard-section">
+    <h2>Contact Us</h2>
+    <div class="contact-info">
+      <div>Email - <a href="mailto:adtronixsystemspvtltd@gmail.com">adtronixsystemspvtltd@gmail.com</a></div>
+      <div>Mobile - <a href="tel:7340321688">7340321688</a></div>
+      <div>LinkedIn - <a href="https://www.linkedin.com/in/adtronix-adtronix-b5b25b375" target="_blank">adtronix-adtronix-b5b25b375</a></div>
+    </div>
+  </div>
+</body>
+</html>
